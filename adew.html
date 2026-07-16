@@ -70,6 +70,129 @@ color: #f8fafc;
 /* Animations */
 @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 .animate-fade-in { animation: fadeIn 0.8s ease-out forwards; }
+
+/* ===== CERTIFICATION MARQUEE ANIMATIONS ===== */
+@keyframes scroll-left {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+@keyframes scroll-right {
+  0% { transform: translateX(-50%); }
+  100% { transform: translateX(0); }
+}
+@keyframes float-up {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(0, 0, 255, 0.15); }
+  50% { box-shadow: 0 0 40px rgba(0, 0, 255, 0.35); }
+}
+@keyframes rotate-border {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.marquee-track-left {
+  animation: scroll-left 30s linear infinite;
+}
+.marquee-track-right {
+  animation: scroll-right 30s linear infinite;
+}
+.marquee-track-left:hover,
+.marquee-track-right:hover {
+  animation-play-state: paused;
+}
+
+.cert-card {
+  position: relative;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  animation: float-up 4s ease-in-out infinite;
+}
+.cert-card:nth-child(2) { animation-delay: 0.5s; }
+.cert-card:nth-child(3) { animation-delay: 1s; }
+.cert-card:nth-child(4) { animation-delay: 1.5s; }
+
+.cert-card:hover {
+  transform: translateY(-12px) scale(1.03);
+  z-index: 10;
+}
+
+.cert-card::before {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 1.25rem;
+  padding: 3px;
+  background: linear-gradient(135deg, #0000FF, #6694ff, #0000FF, #3370ff);
+  background-size: 300% 300%;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  animation: shimmer 3s linear infinite;
+}
+.cert-card:hover::before {
+  opacity: 1;
+}
+
+.cert-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 1rem;
+  background: radial-gradient(circle at center, rgba(0,0,255,0.08), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+.cert-card:hover::after {
+  opacity: 1;
+}
+
+.cert-badge {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, #0000FF, #3370ff);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 700;
+  box-shadow: 0 4px 15px rgba(0, 0, 255, 0.4);
+  animation: pulse-glow 2s ease-in-out infinite;
+  z-index: 20;
+}
+
+.cert-section-title {
+  background: linear-gradient(90deg, #0000FF, #3370ff, #0000FF);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 4s linear infinite;
+}
+
+/* Pause animation when user prefers reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track-left,
+  .marquee-track-right,
+  .cert-card,
+  .cert-badge,
+  .cert-section-title {
+    animation: none !important;
+  }
+}
+
 /* Modal Transitions */
 .modal-overlay {
 opacity: 0; visibility: hidden; transition: all 0.3s ease;
@@ -215,34 +338,180 @@ Immersive, professional training in world languages (English, Amharic, Mandarin,
 </div>
 </div>
 </section>
-<section id="certificates" class="py-20 bg-white dark:bg-slate-800 transition-colors border-t border-gray-100 dark:border-slate-700">
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-<div class="text-center max-w-3xl mx-auto mb-16">
-<h2 class="font-heading text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4" data-i18n="cert_title">Our Certifications</h2>
-<p class="text-lg text-gray-600 dark:text-gray-300" data-i18n="cert_desc">Recognized locally and globally for excellence in education and skill development.</p>
-</div>
-<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-<!-- Certificate 1 -->
-<div class="bg-gray-50 dark:bg-slate-900 p-8 rounded-3xl border border-gray-100 dark:border-slate-700 text-center hover:shadow-hover transition-all transform hover:-translate-y-2">
-<img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAcFBQYFBAcGBgYIBwcICxILCwoKCxYPEA0SGhYbGhkWGRgcICgiHB4mHhgZIzAkJiorLS4tGyIyNTEsNSgsLSz/2wBDAQcICAsJCxULCxUsHRkdLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCz/wAARCASwA4QDASIAAhEBAxEB/8QAHAAAAQUBAQEAAAAAAAAAAAAAAwIEBQYHAQAI/8QAVxAAAQMCBAMEBwQFBwoEBQIHAQACAwQRBRIhMQZBURMiYXEUMoGRobHBByNC0RVSYuHwFiQzcoKS0hc0Q1Njg6KywvElNXOTJkRFlOI2VISjVXSFw/L/xAAbAQADAQEBAQEAAAAAAAAAAAAAAQIDBAUGB//EADYRAQEAAgEDAwMCAwcEAgMAAAABAhEDEiExBEFRBRMiMmEUcYEjM0JSobHwJDSR4RXRBkNi/9oADAMBAAIRAxEAPwD17FuH8Lxxo9OpGvkZqyZpySMPUOGoWHVYNxBQQPgp5oOIsNcLOpMQsJrdA+1nf2h7V1gRLh6rF7eQVNOyaaEkEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgE......" alt="Ministry of Education Certificate" class="w-24 h-24 mx-auto rounded-full object-cover mb-6 border-4 border-brand-100 dark:border-brand-900/50 shadow-sm">
-<h3 class="font-heading font-bold text-xl text-gray-900 dark:text-white mb-2" data-i18n="cert_1_title">Ministry of Education</h3>
-<p class="text-sm text-gray-600 dark:text-gray-400" data-i18n="cert_1_desc">Fully licensed and accredited by the Ethiopian Ministry of Education for language and technical training.</p>
-</div>
-<!-- Certificate 2 -->
-<div class="bg-gray-50 dark:bg-slate-900 p-8 rounded-3xl border border-gray-100 dark:border-slate-700 text-center hover:shadow-hover transition-all transform hover:-translate-y-2">
-<img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAcFBQYFBAcGBgYIBwcICxILCwoKCxYPEA0SGhYbGhkWGRgcICgiHB4mHhgZIzAkJiorLS4tGyIyNTEsNSgsLSz/2wBDAQcICAsJCxULCxUsHRkdLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCz/wAARCAKjA4QDASIAAhEBAxEB/8QAHAAAAQUBAQEAAAAAAAAAAAAAAgABAwQFBgcI/8QAVxAAAQMCBAMEBwQFBwoEBQIHAQACAwQRBRIhMQZBURMiYXEUMoGRobHBByNC0RVSYuHwFiQzcoKS0hc0Q1Njg6KywvElNXOTJkRFlOI2VISjVXSFw/L/xAAbAQADAQEBAQEAAAAAAAAAAAAAAQIDBAUGB//EADYRAQEAAgEDAwMCAwcEAgMAAAABAhEDEiExBEFRBRMiMmEUcYEjM0JSobHwJDSR4RXRBkNi/9oADAMBAAIRAxEAPwD17FuH8Lxxo9OpGvkZqyZpySMPUOGoWHVYNxBQQPgp5oOIsNcLOpMQsJrdA+1nf2h7V1gRLh6rF7eQVNOyaaEkEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgE......" alt="Global Partnerships Certificate" class="w-24 h-24 mx-auto rounded-full object-cover mb-6 border-4 border-brand-100 dark:border-brand-900/50 shadow-sm">
-<h3 class="font-heading font-bold text-xl text-gray-900 dark:text-white mb-2" data-i18n="cert_2_title">Global Partnerships</h3>
-<p class="text-sm text-gray-600 dark:text-gray-400" data-i18n="cert_2_desc">Curriculum aligned with international standards including DELF, HSK, and Cambridge frameworks.</p>
-</div>
-<!-- Certificate 3 -->
-<div class="bg-gray-50 dark:bg-slate-900 p-8 rounded-3xl border border-gray-100 dark:border-slate-700 text-center hover:shadow-hover transition-all transform hover:-translate-y-2">
-<img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAcFBQYFBAcGBgYIBwcICxILCwoKCxYPEA0SGhYbGhkWGRgcICgiHB4mHhgZIzAkJiorLS4tGyIyNTEsNSgsLSz/2wBDAQcICAsJCxULCxUsHRkdLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCz/wAARCAKjA4QDASIAAhEBAxEB/8QAHAAAAQUBAQEAAAAAAAAAAAAAAgABAwQFBgcI/8QAVxAAAQMCBAMEBwQFBwoEBQIHAQACAwQRBRIhMQZBURMiYXEUMoGRobHBByNC0RVSYuHwFiQzcoKS0hc0Q1Njg6KywvElNXOTJkRFlOI2VISjVXSFw/L/xAAbAQADAQEBAQEAAAAAAAAAAAAAAQIDBAUGB//EADYRAQEAAgEDAwMCAwcEAgMAAAABAhEDEiExBEFRBRMiMmEUcYEjM0JSobHwJDSR4RXRBkNi/9oADAMBAAIRAxEAPwD17FuH8Lxxo9OpGvkZqyZpySMPUOGoWHVYNxBQQPgp5oOIsNcLOpMQsJrdA+1nf2h7V1gRLh6rF7eQVNOyaaEkEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEg......" alt="Tech Excellence Award Certificate" class="w-24 h-24 mx-auto rounded-full object-cover mb-6 border-4 border-brand-100 dark:border-brand-900/50 shadow-sm">
-<h3 class="font-heading font-bold text-xl text-gray-900 dark:text-white mb-2" data-i18n="cert_3_title">Tech Excellence Award</h3>
-<p class="text-sm text-gray-600 dark:text-gray-400" data-i18n="cert_3_desc">Recognized as a premier institution for full-stack development and modern digital skills bootcamps.</p>
-</div>
-</div>
-</div>
+
+<!-- ===== DYNAMIC CERTIFICATION SECTION ===== -->
+<section id="certificates" class="py-20 bg-white dark:bg-slate-800 transition-colors border-t border-gray-100 dark:border-slate-700 overflow-hidden">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Section Header -->
+    <div class="text-center max-w-3xl mx-auto mb-16">
+      <div class="inline-flex items-center space-x-2 mb-4">
+        <svg class="w-8 h-8 text-brand-600 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/>
+        </svg>
+        <span class="text-sm font-semibold text-brand-600 uppercase tracking-widest">Accredited</span>
+      </div>
+      <h2 class="cert-section-title font-heading text-4xl md:text-5xl font-extrabold mb-4" data-i18n="cert_title">Our Certifications</h2>
+      <p class="text-lg text-gray-600 dark:text-gray-300" data-i18n="cert_desc">Recognized locally and globally for excellence in education and skill development.</p>
+    </div>
+
+    <!-- Row 1: Scrolling Left -->
+    <div class="relative mb-8">
+      <!-- Fade Edges -->
+      <div class="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-white dark:from-slate-800 to-transparent z-10 pointer-events-none"></div>
+      <div class="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-white dark:from-slate-800 to-transparent z-10 pointer-events-none"></div>
+
+      <div class="flex overflow-hidden">
+        <div class="marquee-track-left flex gap-8 pr-8">
+          <!-- Original 4 cards -->
+          <div class="cert-card flex-shrink-0 w-80 md:w-96">
+            <div class="relative bg-gradient-to-br from-white to-brand-50 dark:from-slate-700 dark:to-slate-800 rounded-2xl p-4 shadow-lg border border-gray-100 dark:border-slate-600">
+              <div class="cert-badge">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+              </div>
+              <img src="assets/certification/image1.jpg" alt="Certificate 1" class="w-full h-56 md:h-64 object-cover rounded-xl">
+            </div>
+          </div>
+          <div class="cert-card flex-shrink-0 w-80 md:w-96">
+            <div class="relative bg-gradient-to-br from-white to-brand-50 dark:from-slate-700 dark:to-slate-800 rounded-2xl p-4 shadow-lg border border-gray-100 dark:border-slate-600">
+              <div class="cert-badge">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+              </div>
+              <img src="assets/certification/image2.jpg" alt="Certificate 2" class="w-full h-56 md:h-64 object-cover rounded-xl">
+            </div>
+          </div>
+          <div class="cert-card flex-shrink-0 w-80 md:w-96">
+            <div class="relative bg-gradient-to-br from-white to-brand-50 dark:from-slate-700 dark:to-slate-800 rounded-2xl p-4 shadow-lg border border-gray-100 dark:border-slate-600">
+              <div class="cert-badge">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+              </div>
+              <img src="assets/certification/image3.jpg" alt="Certificate 3" class="w-full h-56 md:h-64 object-cover rounded-xl">
+            </div>
+          </div>
+          <div class="cert-card flex-shrink-0 w-80 md:w-96">
+            <div class="relative bg-gradient-to-br from-white to-brand-50 dark:from-slate-700 dark:to-slate-800 rounded-2xl p-4 shadow-lg border border-gray-100 dark:border-slate-600">
+              <div class="cert-badge">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+              </div>
+              <img src="assets/certification/image4.jpg" alt="Certificate 4" class="w-full h-56 md:h-64 object-cover rounded-xl">
+            </div>
+          </div>
+          <!-- Duplicated for seamless loop -->
+          <div class="cert-card flex-shrink-0 w-80 md:w-96">
+            <div class="relative bg-gradient-to-br from-white to-brand-50 dark:from-slate-700 dark:to-slate-800 rounded-2xl p-4 shadow-lg border border-gray-100 dark:border-slate-600">
+              <div class="cert-badge">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+              </div>
+              <img src="assets/certification/image1.jpg" alt="Certificate 1" class="w-full h-56 md:h-64 object-cover rounded-xl">
+            </div>
+          </div>
+          <div class="cert-card flex-shrink-0 w-80 md:w-96">
+            <div class="relative bg-gradient-to-br from-white to-brand-50 dark:from-slate-700 dark:to-slate-800 rounded-2xl p-4 shadow-lg border border-gray-100 dark:border-slate-600">
+              <div class="cert-badge">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+              </div>
+              <img src="assets/certification/image2.jpg" alt="Certificate 2" class="w-full h-56 md:h-64 object-cover rounded-xl">
+            </div>
+          </div>
+          <div class="cert-card flex-shrink-0 w-80 md:w-96">
+            <div class="relative bg-gradient-to-br from-white to-brand-50 dark:from-slate-700 dark:to-slate-800 rounded-2xl p-4 shadow-lg border border-gray-100 dark:border-slate-600">
+              <div class="cert-badge">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+              </div>
+              <img src="assets/certification/image3.jpg" alt="Certificate 3" class="w-full h-56 md:h-64 object-cover rounded-xl">
+            </div>
+          </div>
+          <div class="cert-card flex-shrink-0 w-80 md:w-96">
+            <div class="relative bg-gradient-to-br from-white to-brand-50 dark:from-slate-700 dark:to-slate-800 rounded-2xl p-4 shadow-lg border border-gray-100 dark:border-slate-600">
+              <div class="cert-badge">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+              </div>
+              <img src="assets/certification/image4.jpg" alt="Certificate 4" class="w-full h-56 md:h-64 object-cover rounded-xl">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Row 2: Scrolling Right (reversed order) -->
+    <div class="relative">
+      <div class="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-white dark:from-slate-800 to-transparent z-10 pointer-events-none"></div>
+      <div class="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-white dark:from-slate-800 to-transparent z-10 pointer-events-none"></div>
+
+      <div class="flex overflow-hidden">
+        <div class="marquee-track-right flex gap-8 pr-8">
+          <!-- Reversed order for variety -->
+          <div class="cert-card flex-shrink-0 w-80 md:w-96">
+            <div class="relative bg-gradient-to-br from-white to-brand-50 dark:from-slate-700 dark:to-slate-800 rounded-2xl p-4 shadow-lg border border-gray-100 dark:border-slate-600">
+              <div class="cert-badge">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+              </div>
+              <img src="assets/certification/image4.jpg" alt="Certificate 4" class="w-full h-56 md:h-64 object-cover rounded-xl">
+            </div>
+          </div>
+          <div class="cert-card flex-shrink-0 w-80 md:w-96">
+            <div class="relative bg-gradient-to-br from-white to-brand-50 dark:from-slate-700 dark:to-slate-800 rounded-2xl p-4 shadow-lg border border-gray-100 dark:border-slate-600">
+              <div class="cert-badge">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+              </div>
+              <img src="assets/certification/image3.jpg" alt="Certificate 3" class="w-full h-56 md:h-64 object-cover rounded-xl">
+            </div>
+          </div>
+          <div class="cert-card flex-shrink-0 w-80 md:w-96">
+            <div class="relative bg-gradient-to-br from-white to-brand-50 dark:from-slate-700 dark:to-slate-800 rounded-2xl p-4 shadow-lg border border-gray-100 dark:border-slate-600">
+              <div class="cert-badge">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+              </div>
+              <img src="assets/certification/image2.jpg" alt="Certificate 2" class="w-full h-56 md:h-64 object-cover rounded-xl">
+            </div>
+          </div>
+          <div class="cert-card flex-shrink-0 w-80 md:w-96">
+            <div class="relative bg-gradient-to-br from-white to-brand-50 dark:from-slate-700 dark:to-slate-800 rounded-2xl p-4 shadow-lg border border-gray-100 dark:border-slate-600">
+              <div class="cert-badge">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+              </div>
+              <img src="assets/certification/image1.jpg" alt="Certificate 1" class="w-full h-56 md:h-64 object-cover rounded-xl">
+            </div>
+          </div>
+          <!-- Duplicated for seamless loop -->
+          <div class="cert-card flex-shrink-0 w-80 md:w-96">
+            <div class="relative bg-gradient-to-br from-white to-brand-50 dark:from-slate-700 dark:to-slate-800 rounded-2xl p-4 shadow-lg border border-gray-100 dark:border-slate-600">
+              <div class="cert-badge">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.4s2 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+              </div>
+              <img src="assets/certification/image4.jpg" alt="Certificate 4" class="w-full h-56 md:h-64 object-cover rounded-xl">
+            </div>
+          </div>
+          <div class="cert-card flex-shrink-0 w-80 md:w-96">
+            <div class="relative bg-gradient-to-br from-white to-brand-50 dark:from-slate-700 dark:to-slate-800 rounded-2xl p-4 shadow-lg border border-gray-100 dark:border-slate-600">
+              <div class="cert-badge">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+              </div>
+              <img src="assets/certification/image3.jpg" alt="Certificate 3" class="w-full h-56 md:h-64 object-cover rounded-xl">
+            </div>
+          </div>
+          <div class="cert-card flex-shrink-0 w-80 md:w-96">
+            <div class="relative bg-gradient-to-br from-white to-brand-50 dark:from-slate-700 dark:to-slate-800 rounded-2xl p-4 shadow-lg border border-gray-100 dark:border-slate-600">
+              <div class="cert-badge">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+              </div>
+              <img src="assets/certification/image2.jpg" alt="Certificate 2" class="w-full h-56 md:h-64 object-cover rounded-xl">
+            </div>
+          </div>
+          <div class="cert-card flex-shrink-0 w-80 md:w-96">
+            <div class="relative bg-gradient-to-br from-white to-brand-50 dark:from-slate-700 dark:to-slate-800 rounded-2xl p-4 shadow-lg border border-gray-100 dark:border-slate-600">
+              <div class="cert-badge">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+              </div>
+              <img src="assets/certification/image1.jpg" alt="Certificate 1" class="w-full h-56 md:h-64 object-cover rounded-xl">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
+<!-- ===== END CERTIFICATION SECTION ===== -->
+
 <section id="our-lab" class="py-20 bg-gray-50 dark:bg-slate-900 transition-colors border-t border-gray-100 dark:border-slate-700">
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 <div class="text-center max-w-3xl mx-auto mb-12">
@@ -250,7 +519,7 @@ Immersive, professional training in world languages (English, Amharic, Mandarin,
 <p class="text-lg text-gray-600 dark:text-gray-300">A modern, well-equipped computer lab designed to give students hands-on practice in a comfortable learning environment.</p>
 </div>
 <div class="max-w-2xl mx-auto">
-<img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAcFBQYFBAcGBgYIBwcICxILCwoKCxYPEA0SGhYbGhkWGRgcICgiHB4mHhgZIzAkJiorLS4tGyIyNTEsNSgsLSz/2wBDAQcICAsJCxULCxUsHRkdLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCz/wAARCAKjA4QDASIAAhEBAxEB/8QAHAAAAQUBAQEAAAAAAAAAAAAAAgABAwQFBgcI/8QAVxAAAQMCBAMEBwQFBwoEBQIHAQACAwQRBRIhMQZBURMiYXEUMoGRobHBByNC0RVSYuHwFiQzcoKS0hc0Q1Njg6KywvElNXOTJkRFlOI2VISjVXSFw/L/xAAbAQADAQEBAQEAAAAAAAAAAAAAAQIDBAUGB//EADYRAQEAAgEDAwMCAwcEAgMAAAABAhEDEiExBEFRBRMiMmEUcYEjM0JSobHwJDSR4RXRBkNi/9oADAMBAAIRAxEAPwD17FuH8Lxxo9OpGvkZqyZpySMPUOGoWHVYNxBQQPgp5oOIsNcLOpMQsJrdA+1nf2h7V1gRLh6rF7eQVNOyaaEkEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgE......" alt="Our Lab" class="w-full h-auto rounded-3xl shadow-soft border border-gray-100 dark:border-slate-700">
+<img src="assets/other/image5.jpg" alt="Our Lab" class="w-full h-auto rounded-3xl shadow-soft border border-gray-100 dark:border-slate-700">
 </div>
 </div>
 </section>
@@ -265,7 +534,7 @@ Immersive, professional training in world languages (English, Amharic, Mandarin,
 <!-- Teacher 1 -->
 <div class="bg-white dark:bg-slate-800 rounded-3xl overflow-hidden shadow-sm border border-gray-100 dark:border-slate-700 hover:shadow-xl transition-all group p-6 text-center">
 <div class="relative w-28 h-28 mx-auto mb-4">
-<img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=200&q=80" alt="Muse.x" class="w-full h-full object-cover rounded-full border-4 border-brand-50 dark:border-slate-700 group-hover:border-brand-300 transition-colors">
+<img src="assets/avatars/avatar1.png" alt="Muse.x" class="w-full h-full object-cover rounded-full border-4 border-brand-50 dark:border-slate-700 group-hover:border-brand-300 transition-colors">
 </div>
 <h3 class="font-heading font-bold text-xl text-gray-900 dark:text-white">Muse.x</h3>
 <p class="text-brand-600 font-medium text-sm mb-3">English Expert</p>
@@ -274,7 +543,7 @@ Immersive, professional training in world languages (English, Amharic, Mandarin,
 <!-- Teacher 2 -->
 <div class="bg-white dark:bg-slate-800 rounded-3xl overflow-hidden shadow-sm border border-gray-100 dark:border-slate-700 hover:shadow-xl transition-all group p-6 text-center">
 <div class="relative w-28 h-28 mx-auto mb-4">
-<img src="https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?auto=format&fit=crop&w=200&q=80" alt="Fkrab.y" class="w-full h-full object-cover rounded-full border-4 border-brand-50 dark:border-slate-700 group-hover:border-brand-300 transition-colors">
+<img src="assets/avatars/avatar2.png" alt="Fkrab.y" class="w-full h-full object-cover rounded-full border-4 border-brand-50 dark:border-slate-700 group-hover:border-brand-300 transition-colors">
 </div>
 <h3 class="font-heading font-bold text-xl text-gray-900 dark:text-white">Fkrab.y</h3>
 <p class="text-brand-600 font-medium text-sm mb-3">English Expert</p>
@@ -283,7 +552,7 @@ Immersive, professional training in world languages (English, Amharic, Mandarin,
 <!-- Teacher 3 -->
 <div class="bg-white dark:bg-slate-800 rounded-3xl overflow-hidden shadow-sm border border-gray-100 dark:border-slate-700 hover:shadow-xl transition-all group p-6 text-center">
 <div class="relative w-28 h-28 mx-auto mb-4">
-<img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=200&q=80" alt="Melat.z" class="w-full h-full object-cover rounded-full border-4 border-brand-50 dark:border-slate-700 group-hover:border-brand-300 transition-colors">
+<img src="assets/avatars/avatar4.png" alt="Melat.z" class="w-full h-full object-cover rounded-full border-4 border-brand-50 dark:border-slate-700 group-hover:border-brand-300 transition-colors">
 </div>
 <h3 class="font-heading font-bold text-xl text-gray-900 dark:text-white">Melat.z</h3>
 <p class="text-brand-600 font-medium text-sm mb-3">Mandarin Expert</p>
@@ -292,7 +561,7 @@ Immersive, professional training in world languages (English, Amharic, Mandarin,
 <!-- Teacher 4 -->
 <div class="bg-white dark:bg-slate-800 rounded-3xl overflow-hidden shadow-sm border border-gray-100 dark:border-slate-700 hover:shadow-xl transition-all group p-6 text-center">
 <div class="relative w-28 h-28 mx-auto mb-4">
-<img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80" alt="Desta.k" class="w-full h-full object-cover rounded-full border-4 border-brand-50 dark:border-slate-700 group-hover:border-brand-300 transition-colors">
+<img src="assets/avatars/avatar3.png" alt="Desta.k" class="w-full h-full object-cover rounded-full border-4 border-brand-50 dark:border-slate-700 group-hover:border-brand-300 transition-colors">
 </div>
 <h3 class="font-heading font-bold text-xl text-gray-900 dark:text-white">Desta.k</h3>
 <p class="text-brand-600 font-medium text-sm mb-3">Computer Expert (Professional Software Developer)</p>
@@ -482,7 +751,7 @@ const coursesData = [
 id: 'english', category: 'languages',
 title: { EN: 'English Package', AM: 'የእንግሊዝኛ ፓኬጅ', AR: 'باقة اللغة الإنجليزية', FR: 'Forfait Anglais', ZH: '英语课程套餐' },
 desc: { EN: 'A structured 3-term English program for adults, with a private 1:1 option.', AM: 'ለአዋቂዎች የተዘጋጀ የ3 ተርም የእንግሊዝኛ ፕሮግራም፣ ከግል 1:1 ትምህርት አማራጭ ጋር።', AR: 'برنامج إنجليزي منظم من 3 فصول للبالغين، مع خيار جلسات فردية.', FR: 'Un programme d\'anglais structuré de 3 trimestres pour adultes, avec option privée.', ZH: '为成年人设计的三学期结构化英语课程，附带一对一私教选项。' },
-image: 'https://images.unsplash.com/photo-1546410531-bb4caa6b424d?auto=format&fit=crop&w=500&q=80',
+image: 'assets/other/image3.jpg',
 packages: [
 { name: 'Term 1 (Group)', price: '5,900 ETB', duration: '3 Months', schedule: 'Group classes for adults', details: 'First term of the English group package.' },
 { name: 'Term 2 (Group)', price: '5,900 ETB', duration: '3 Months', schedule: 'Group classes for adults', details: 'Second term of the English group package.' },
@@ -494,7 +763,7 @@ packages: [
 id: 'amharic', category: 'languages',
 title: { EN: 'Amharic Package', AM: 'የአማርኛ ፓኬጅ', AR: 'باقة اللغة الأمهرية', FR: 'Forfait Amharique', ZH: '阿姆哈拉语课程套餐' },
 desc: { EN: 'A structured 3-term Amharic program for adults, with a private 1:1 option.', AM: 'ለአዋቂዎች የተዘጋጀ የ3 ተርም የአማርኛ ፕሮግራም፣ ከግል 1:1 ትምህርት አማራጭ ጋር።', AR: 'برنامج أمهري منظم من 3 فصول للبالغين، مع خيار جلسات فردية.', FR: 'Un programme d\'amharique structuré de 3 trimestres pour adultes, avec option privée.', ZH: '为成年人设计的三学期结构化阿姆哈拉语课程，附带一对一私教选项。' },
-image: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAH5A4QDASIAAhEBAxEB/8QAHAAAAQUBAQEAAAAAAAAAAAAAAwIEBQYHAQAI/8QAVxAAAQMCBAMEBwQFBwoEBQIHAQACAwQRBRIhMQZBURMiYXEUMoGRobHBByNC0RVSYuHwFiQzcoKS0hc0Q1Njg6KywvElNXOTJkRFlOI2VISjVXSFw/L/xAAbAQADAQEBAQEAAAAAAAAAAAAAAQIDBAUGB//EADYRAQEAAgEDAwMCAwcEAgMAAAABAhEDEiExBEFRBRMiMmEUcYEjM0JSobHwJDSR4RXRBkNi/9oADAMBAAIRAxEAPwD17FuH8Lxxo9OpGvkZqyZpySMPUOGoWHVYNxBQQPgp5oOIsNcLOpMQsJrdA+1nf2h7V1gRLh6rF7eQVNOyaaEkEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgE......',
+image: 'assets/other/image4.jpg',
 packages: [
 { name: 'Term 1 (Group)', price: '5,900 ETB', duration: '3 Months', schedule: 'Group classes for adults', details: 'First term of the Amharic group package.' },
 { name: 'Term 2 (Group)', price: '5,900 ETB', duration: '3 Months', schedule: 'Group classes for adults', details: 'Second term of the Amharic group package.' },
@@ -506,7 +775,7 @@ packages: [
 id: 'mandarin', category: 'languages',
 title: { EN: 'Mandarin Package', AM: 'የማንዳሪን ፓኬጅ', AR: 'باقة اللغة الماندرين', FR: 'Forfait Mandarin', ZH: '普通话课程套餐' },
 desc: { EN: 'A structured 3-term Mandarin program for adults, with a private 1:1 option.', AM: 'ለአዋቂዎች የተዘጋጀ የ3 ተርም የማንዳሪን ፕሮግራም፣ ከግል 1:1 ትምህርት አማራጭ ጋር።', AR: 'برنامج ماندرين منظم من 3 فصول للبالغين، مع خيار جلسات فردية.', FR: 'Un programme de mandarin structuré de 3 trimestres pour adultes, avec option privée.', ZH: '为成年人设计的三学期结构化普通话课程，附带一对一私教选项。' },
-image: 'https://images.unsplash.com/photo-1543332164-6e82f355badc?auto=format&fit=crop&w=500&q=80',
+image: 'assets/other/image1.jpg',
 packages: [
 { name: 'Term 1 (Group)', price: '6,000 ETB', duration: '3 Months', schedule: 'Group classes for adults', details: 'First term of the Mandarin group package.' },
 { name: 'Term 2 (Group)', price: '6,000 ETB', duration: '3 Months', schedule: 'Group classes for adults', details: 'Second term of the Mandarin group package.' },
@@ -518,7 +787,7 @@ packages: [
 id: 'french', category: 'languages',
 title: { EN: 'French Package', AM: 'የፈረንሳይኛ ፓኬጅ', AR: 'باقة اللغة الفرنسية', FR: 'Forfait Français', ZH: '法语课程套餐' },
 desc: { EN: 'A structured 3-term French program for adults, with a private 1:1 option.', AM: 'ለአዋቂዎች የተዘጋጀ የ3 ተርም የፈረንሳይኛ ፕሮግራም፣ ከግል 1:1 ትምህርት አማራጭ ጋር።', AR: 'برنامج فرنسي منظم من 3 فصول للبالغين، مع خيار جلسات فردية.', FR: 'Un programme de français structuré de 3 trimestres pour adultes, avec option privée.', ZH: '为成年人设计的三学期结构化法语课程，附带一对一私教选项。' },
-image: 'https://images.unsplash.com/photo-1499856871958-5b9627545d1a?auto=format&fit=crop&w=500&q=80',
+image: 'assets/other/image2.jpg',
 packages: [
 { name: 'Term 1 (Group)', price: '6,000 ETB', duration: '3 Months', schedule: 'Group classes for adults', details: 'First term of the French group package.' },
 { name: 'Term 2 (Group)', price: '6,000 ETB', duration: '3 Months', schedule: 'Group classes for adults', details: 'Second term of the French group package.' },
@@ -530,7 +799,7 @@ packages: [
 id: 'basic_computer', category: 'skills',
 title: { EN: 'Basic Computer Skill', AM: 'መሠረታዊ የኮምፒውተር ክህሎት', AR: 'مهارات الحاسوب الأساسية', FR: 'Compétences Informatiques de Base', ZH: '基础计算机技能' },
 desc: { EN: 'Essential computer literacy for adults, with a private 1:1 option.', AM: 'ለአዋቂዎች መሠረታዊ የኮምፒውተር ክህሎት፣ ከግል 1:1 ትምህርት አማራጭ ጋር።', AR: 'مهارات حاسوبية أساسية للبالغين، مع خيار جلسات فردية.', FR: 'Compétences informatiques essentielles pour adultes, avec option privée.', ZH: '为成年人提供的基础计算机技能课程，附带一对一私教选项。' },
-image: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAcFBQYFBAcGBgYIBwcICxILCwoKCxYPEA0SGhYbGhkWGRgcICgiHB4mHhgZIzAkJiorLS4tGyIyNTEsNSgsLSz/2wBDAQcICAsJCxULCxUsHRkdLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCz/wAARCAKjA4QDASIAAhEBAxEB/8QAHAAAAQUBAQEAAAAAAAAAAAAAAgABAwQFBgcI/8QAVxAAAQMCBAMEBwQFBwoEBQIHAQACAwQRBRIhMQZBURMiYXEUMoGRobHBByNC0RVSYuHwFiQzcoKS0hc0Q1Njg6KywvElNXOTJkRFlOI2VISjVXSFw/L/xAAbAQADAQEBAQEAAAAAAAAAAAAAAQIDBAUGB//EADYRAQEAAgEDAwMCAwcEAgMAAAABAhEDEiExBEFRBRMiMmEUcYEjM0JSobHwJDSR4RXRBkNi/9oADAMBAAIRAxEAPwD17FuH8Lxxo9OpGvkZqyZpySMPUOGoWHVYNxBQQPgp5oOIsNcLOpMQsJrdA+1nf2h7V1gRLh6rF7eQVNOyaaEkEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgEgE......',
+image: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=500&q=80',
 packages: [
 { name: 'Term 1 (Group)', price: '5,900 ETB', duration: '3 Months', schedule: 'Group classes for adults', details: 'First term of the Basic Computer Skill package.' },
 { name: 'Term 2 (Group)', price: '5,900 ETB', duration: '3 Months', schedule: 'Group classes for adults', details: 'Second term of the Basic Computer Skill package.' },
@@ -542,7 +811,7 @@ packages: [
 id: 'programming', category: 'skills',
 title: { EN: 'Programming (Python, Node.js, JavaScript)', AM: 'ፕሮግራሚንግ (Python, Node.js, JavaScript)', AR: 'البرمجة (Python, Node.js, JavaScript)', FR: 'Programmation (Python, Node.js, JavaScript)', ZH: '编程 (Python、Node.js、JavaScript)' },
 desc: { EN: 'Learn to build with Python, Node.js, and JavaScript across three terms.', AM: 'Python, Node.js, እና JavaScript በመጠቀም መገንባትን በ3 ተርም ይማሩ።', AR: 'تعلم البناء باستخدام Python وNode.js وJavaScript على مدار ثلاثة فصول.', FR: 'Apprenez à développer avec Python, Node.js et JavaScript sur trois trimestres.', ZH: '在三个学期中学习使用 Python、Node.js 和 JavaScript 进行开发。' },
-image: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=500&q=80',
+image: 'assets/other/image.jpg',
 packages: [
 { name: 'Term 1', price: '6,900 ETB', duration: '3 Months', schedule: 'Group classes for adults', details: 'First term of the Programming package.', popular: true },
 { name: 'Term 2', price: '6,900 ETB', duration: '2 Months', schedule: 'Group classes for adults', details: 'Second term of the Programming package.' },
